@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r import, warning = FALSE, message = FALSE}
 
 # Load relevant packages
-pacman::p_load(dplyr, readr, dplyr, tidyverse, graphics, kableExtra)
+pacman::p_load(dplyr, readr, dplyr, tidyverse, graphics, kableExtra, tigerstats)
 
 # Import data from Github 
 Data <- read_csv("https://raw.githubusercontent.com/kijohnson/Data/main/titanic.csv")
@@ -26,7 +26,7 @@ Data <- read_csv("https://raw.githubusercontent.com/kijohnson/Data/main/titanic.
 
 # 2. Find Median Age
 
-```{r medianage, warning = FALSE, message = FALSE}
+```{r analzye, warning = FALSE, message = FALSE}
 
 Data %>%
   group_by(Pclass) %>%
@@ -62,3 +62,43 @@ ggplot(Data, aes(x = Pclass, y = Age)) +
    stat_summary(fun.y=median, geom="point", shape=2, color="blue") # add median
 
 ```
+
+# 4. Find percent males and females by class
+
+```{r analyze, warning = FALSE, message = FALSE}
+
+Table <- rowPerc(xtabs(~Pclass+Sex, data = Data))
+ftable(Table)
+
+# Rows represent passenger class 1, 2, and 3
+Table %>%
+  kbl(col.names = c("Female (percent)", "Male (percent)", "Total (percent)")) %>%
+  kable_styling() 
+
+```
+
+# 5. Oops forgot to annotate git steps
+
+### Set up user information
+Leahs-MacBook-Air-2:~ leahnason$ git config --global user.name "Leah Nason"
+Leahs-MacBook-Air-2:~ leahnason$ git config --global user.email leahnason@wustl.edu
+Leahs-MacBook-Air-2:~ leahnason$ git config --list
+
+### Change directory for git repository
+Leahs-MacBook-Air-2:~ leahnason$ cd "/Users/leahnason/Dropbox/My Mac (Leah’s MacBook Air)/Desktop/Fall 2022/Advanced Data Analysis/Midterm/ADA Midterm"
+
+### Initialize a git repository
+Leahs-MacBook-Air-2:ADA Midterm leahnason$ git init
+Initialized empty Git repository in /Users/leahnason/Dropbox/My Mac (Leah’s MacBook Air)/Desktop/Fall 2022/Advanced Data Analysis/Midterm/ADA Midterm/.git/
+
+### File is staged
+Leahs-MacBook-Air-2:ADA Midterm leahnason$ git add Midterm.Rmd
+
+### Commit that version with message describing changes 
+Leahs-MacBook-Air-2:ADA Midterm leahnason$ git commit -m 'Version 1'
+
+### Push local files to remote repository
+Leahs-MacBook-Air-2:ADA Midterm leahnason$ git remote add origin git@github.com:leahnason/ADA-Midterm.git
+Leahs-MacBook-Air-2:ADA Midterm leahnason$ git branch -M main
+Leahs-MacBook-Air-2:ADA Midterm leahnason$ git push -u origin main
+
