@@ -1,0 +1,64 @@
+---
+title: "ADA Midterm Exam Fall 2022"
+author: "Leah Nason"
+date: "10/20/2022"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1. Import Data 
+
+```{r import, warning = FALSE, message = FALSE}
+
+# Load relevant packages
+pacman::p_load(dplyr, readr, dplyr, tidyverse, graphics, kableExtra)
+
+# Import data from Github 
+Data <- read_csv("https://raw.githubusercontent.com/kijohnson/Data/main/titanic.csv")
+
+```
+
+# 2. Find Median Age
+
+```{r medianage, warning = FALSE, message = FALSE}
+
+Data %>%
+  group_by(Pclass) %>%
+  summarize(Median = median(Age)) %>%
+  kbl(col.names = c("Passenger Class", "Median")) %>%
+  kable_styling() 
+
+```
+
+# 3. Plot
+
+```{r plot, warning = FALSE, message = FALSE}
+
+# Boxplot
+ggplot(Data, aes(x = as.factor(Pclass), y = Age)) +
+  geom_boxplot(fill="slateblue") +
+  labs(x = "Passengter Class",
+       y = "Age",
+       title = "Boxplot of Age by Passenger Class") 
+
+# Scatterplot
+ggplot(Data, aes(x = Pclass, y = Age)) +
+  geom_point() +
+  labs(x = "Passenger Class",
+       y = "Age",
+       title = "Scatterplot of Age by Passenger Class")
+
+# Violin plot
+ggplot(Data, aes(x = Pclass, y = Age)) +
+  geom_violin(draw_quantiles = c(0.25, 0.5, 0.75)) + # add quartiles
+  labs(x = "Self Heart Attack", y = "Life satisfaction",  title = "Violin plot")+
+   stat_summary(fun.y=mean, geom="point", shape=23, color="red")+ # add the mean
+   stat_summary(fun.y=median, geom="point", shape=2, color="blue") # add median
+
+```
